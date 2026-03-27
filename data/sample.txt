@@ -1,0 +1,2 @@
+Employees can reset their password using the internal security portal.
+The portal is accessible via the company dashboard.

@@ -1,4 +1,16 @@
+# Virtual environment
+.venv/
+
+# Python cache
 __pycache__/
-.env
-vectorstore/
 *.pyc
+
+# Vector DB
+vectorstore/
+faiss_index/
+
+# Environment variables
+.env
+
+# Mac files
+.DS_Store
