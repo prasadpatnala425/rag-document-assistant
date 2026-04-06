@@ -1,69 +1,53 @@
-# RAG Document Assistant
+# 🤖 RAG Document Assistant
 
-## 📌 Overview
-
-This project implements a **Retrieval-Augmented Generation (RAG)** system that answers user queries based on custom documents.
-
-It uses embeddings + vector search to retrieve relevant context and a language model to generate answers.
+A full-stack Retrieval-Augmented Generation (RAG) chatbot that answers questions based on custom documents using FAISS vector search, FastAPI backend, and Streamlit frontend.
 
 ---
 
 ## 🚀 Features
 
-* Document ingestion and chunking
-* Embedding generation using HuggingFace
-* Vector similarity search using FAISS
-* Context-aware question answering
-* Debug view to inspect retrieved context
+- 📄 Document ingestion and chunking
+- 🔍 Semantic search using FAISS
+- 🤖 Context-aware answer generation (HuggingFace FLAN-T5)
+- ⚡ FastAPI backend for API access
+- 💬 Streamlit chatbot UI
+- 🧠 Context debugging support
 
 ---
 
-## 🛠️ Tech Stack
-
-* Python
-* LangChain
-* FAISS (Vector Database)
-* HuggingFace Transformers
-* Sentence Transformers
-
----
-
-## 🧠 Architecture
-
-User Query
-→ Convert to Embedding
-→ Retrieve Relevant Documents (FAISS)
-→ Inject Context into Prompt
-→ LLM Generates Answer
-
----
-
-## 📂 Project Structure
+## 🏗️ Project Structure
 
 ```
 rag-document-assistant/
-│── data/                # Source documents
-│── vectorstore/         # FAISS index (generated)
-│── app.py               # Main chatbot application
-│── ingest.py            # Document ingestion & embedding
-│── requirements.txt     # Dependencies
-│── README.md
+│
+├── data/                # Source documents
+├── vectorstore/         # FAISS index
+├── ingest.py            # Document processing & indexing
+├── app.py               # CLI-based chatbot (initial version)
+├── main.py              # FastAPI backend
+├── ui.py                # Streamlit frontend
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Installation
 
-### 1. Create Virtual Environment
-
+### 1. Clone the repo
+```bash
+git clone <your-repo-url>
+cd rag-document-assistant
 ```
+
+### 2. Create virtual environment
+```bash
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate   # Mac/Linux
 ```
 
-### 2. Install Dependencies
-
-```
+### 3. Install dependencies
+```bash
 pip install -r requirements.txt
 ```
 
@@ -71,94 +55,101 @@ pip install -r requirements.txt
 
 ## 📥 Step 1: Ingest Documents
 
-Place your documents inside the `data/` folder, then run:
+Place your documents inside the `data/` folder.
 
-```
+Run:
+```bash
 python ingest.py
 ```
 
 This will:
-
-* Split documents into chunks
-* Generate embeddings
-* Store them in FAISS vector database
+- Split documents into chunks
+- Create embeddings
+- Store them in FAISS (`vectorstore/`)
 
 ---
 
-## 🤖 Step 2: Run Chatbot
+## 💻 Step 2: Run CLI Chatbot (Optional)
 
-```
+```bash
 python app.py
 ```
 
-Example:
-
-```
-Ask a question: reset password
-```
-
 ---
 
-## 🔍 Debug Mode
+## ⚡ Step 3: Run FastAPI Backend
 
-The app prints retrieved context:
-
-```
---- Retrieved Context ---
-<relevant document chunks>
--------------------------
+```bash
+uvicorn main:app --reload
 ```
 
-This helps verify:
+Open Swagger UI:
+👉 http://127.0.0.1:8000/docs
 
-* Retrieval quality
-* Data correctness
-
----
-
-## ⚠️ Known Issues / Learnings
-
-* LangChain APIs are evolving (deprecations like `.run()` → `.invoke()`)
-* FLAN-T5 model has limited reasoning capability
-* Prompt design significantly affects output quality
-* Retrieval works better when `k` is tuned (e.g., k=1 or 2)
+Example request:
+```json
+{
+  "question": "reset password"
+}
+```
 
 ---
 
-## 🚧 Future Enhancements
+## 💬 Step 4: Run Streamlit UI
 
-* Replace FLAN-T5 with stronger model (Mistral / GPT)
-* Add FastAPI backend
-* Build frontend UI (Streamlit / React)
-* Support PDFs and multiple document formats
-* Add conversation memory
+```bash
+streamlit run ui.py
+```
 
----
-
-## ✅ Status
-
-✔ Fully working RAG pipeline
-✔ Retrieval + generation integrated
-✔ Ready for backend/API integration
+Open:
+👉 http://localhost:8501
 
 ---
 
-## 🙌 Author Notes
+## 🧠 How It Works
 
-This project was built step-by-step to understand:
-
-* RAG architecture
-* Vector databases
-* Prompt engineering
-* LLM limitations
+1. Documents are split into chunks
+2. Embeddings are generated using HuggingFace
+3. FAISS stores vectors for similarity search
+4. User query → converted to embedding
+5. Relevant chunks are retrieved
+6. LLM generates answer using context
 
 ---
 
-## 💡 Example Use Cases
+## 🔧 Tech Stack
 
-* Internal knowledge assistant
-* FAQ chatbot
-* Document search system
-* Customer support automation
+- **LangChain**
+- **FAISS**
+- **HuggingFace Transformers**
+- **FastAPI**
+- **Streamlit**
+- **Python**
+
+---
+
+## ⚠️ Known Issues & Fixes
+
+- Deprecated method:
+  - `get_relevant_documents()` → replaced with `invoke()`
+- Model mismatch:
+  - Use `text2text-generation` for FLAN-T5
+- Prompt issues:
+  - Fixed by explicitly passing `{context}` and `{question}`
+
+---
+
+## 📈 Future Improvements
+
+- Add chat memory
+- Support PDF upload via UI
+- Use OpenAI / Mistral for better responses
+- Deploy on cloud (AWS / Render / Docker)
+
+---
+
+## 💡 Resume Highlight
+
+> Built a full-stack RAG chatbot using FastAPI and Streamlit with FAISS-based semantic search and HuggingFace LLMs for context-aware question answering.
 
 ---
